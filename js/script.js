@@ -30,12 +30,22 @@ AddressBook.prototype.deleteContact = function (id) {
 };
 
 // Business Logic for Contacts ---------
-function Contact(firstName, lastName, phoneNumber, emailAddress, physicalAddress) {
+function Contact(
+    firstName,
+    lastName,
+    phoneNumber,
+    homeAddress,
+    workAddress,
+    homeEmailAddress,
+    workEmailAddress
+) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
-    this.emailAddress = emailAddress;
-    this.physicalAddress = physicalAddress;
+    this.homeAddress = homeAddress;
+    this.workAddress = workAddress;
+    this.homeEmailAddress = homeEmailAddress;
+    this.workEmailAddress = workEmailAddress;
 }
 
 Contact.prototype.fullName = function () {
@@ -50,8 +60,14 @@ function displayContactDetails(addressBookToDisplay) {
     let htmlForContactInfo = "";
     Object.keys(addressBookToDisplay.contacts).forEach(function (key) {
         const contact = addressBookToDisplay.findContact(key);
-        htmlForContactInfo += "<li id=" + contact.id + ">" + contact.firstName
-            + " " + contact.lastName + "</li>";
+        htmlForContactInfo +=
+            "<li id=" +
+            contact.id +
+            ">" +
+            contact.firstName +
+            " " +
+            contact.lastName +
+            "</li>";
     });
     contactsList.html(htmlForContactInfo);
 }
@@ -62,17 +78,21 @@ function showContact(contactId) {
     $(".first-name").html(contact.firstName);
     $(".last-name").html(contact.lastName);
     $(".phone-number").html(contact.phoneNumber);
-    $(".contact-email").html(contact.emailAddress);
-    $(".contphy-address").html(contact.physicalAddress);
+    $(".home-address").html(contact.homeAddress);
+    $(".work-address").html(contact.workAddress);
+    $(".home-emailaddress").html(contact.homeEmailAddress);
+    $(".work-emailaddress").html(contact.workEmailAddress);
     let buttons = $("#buttons");
     buttons.empty();
     // buttons.append("<button class='deleteButton' id=" + + contact.id + ">Delete</button>");
-    buttons.append("<button class='deleteButton' id='+ contact.id +'>Done</button>");
+    buttons.append(
+        "<button class='deleteButton' id='+ contact.id +'>Done</button>"
+    );
 }
 
 function attachContactListeners() {
     $("ul#contacts").on("click", "li", function () {
-        showContact(this.id);     // <--- This is new!
+        showContact(this.id); // <--- This is new!
     });
     // Code below here is new!
     $("#buttons").on("click", ".deleteButton", function () {
@@ -89,16 +109,28 @@ $(document).ready(function () {
         const inputtedFirstName = $("input#new-first-name").val();
         const inputtedLastName = $("input#new-last-name").val();
         const inputtedPhoneNumber = $("input#new-phone-number").val();
-        const inputtedEmailAddress = $("input#new-email").val();
-        const inputtedPhysicalAddress = $("input#new-contphy-address").val();
+        const inputtedHomeAddress = $("input#new-homeaddress").val();
+        const inputtedWorkAddress = $("input#new-workaddress").val();
+        const inputtedHomeEmailAddress = $("input#new-homeemail").val();
+        const inputtedWorkEmailAddress = $("input#new-workemailaddress").val();
 
-        // The next five lines are new:
+        // The next seven lines are new:
         $("input#new-first-name").val("");
         $("input#new-last-name").val("");
         $("input#new-phone-number").val("");
-        $("input#new-email").val("");
-        $("input#new-contphy-address").val("");
-        let newContact = new Contact(inputtedFirstName, inputtedLastName, inputtedPhoneNumber, inputtedEmailAddress, inputtedPhysicalAddress);
+        $("input#new-homeaddress").val("");
+        $("input#new-workaddress").val("");
+        $("input#new-homeemail").val("");
+        $("input#new-workemailaddress").val("");
+        let newContact = new Contact(
+            inputtedFirstName,
+            inputtedLastName,
+            inputtedPhoneNumber,
+            inputtedHomeAddress,
+            inputtedWorkAddress,
+            inputtedHomeEmailAddress,
+            inputtedWorkEmailAddress
+        );
         addressBook.addContact(newContact);
         displayContactDetails(addressBook);
     });
